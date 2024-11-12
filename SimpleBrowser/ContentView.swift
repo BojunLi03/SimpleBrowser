@@ -8,17 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var viewModel = ViewModel()
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            SearchBar(viewModel: viewModel)
+            WebView(viewModel: viewModel)
+            BottomBar(viewModel: viewModel)
         }
-        .padding()
+        .sheet(isPresented: $viewModel.shouldShowShareSheet) {
+            if let url = URL(string: "https://\(viewModel.urlString)") {
+                ShareSheet(activityItems: [url])
+            }
+        }
     }
-}
-
-#Preview {
-    ContentView()
 }
